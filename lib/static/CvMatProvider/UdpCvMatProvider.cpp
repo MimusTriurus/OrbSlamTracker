@@ -20,6 +20,10 @@ void UdpCvMatProvider::stop( ) {
     this->_receiver.stopListen( );
 }
 
+void UdpCvMatProvider::read( cv::Mat &frame ) {
+    _mat.copyTo( frame );
+}
+
 cv::Mat UdpCvMatProvider::cvMat( ) {
     if ( !_receiver.imgData( ).isEmpty( ) )
         _mat = MatSerialization::deserializeMat( _receiver.imgData( ) );

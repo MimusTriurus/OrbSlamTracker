@@ -12,6 +12,8 @@ public:
     virtual void start( )                           = 0;
     virtual void stop( )                            = 0;
     virtual cv::Mat cvMat( );
+    virtual void read( cv::Mat &frame );
+    virtual void read( cv::Mat &left, cv::Mat &right );
 protected:
     cv::Mat _mat;
 };

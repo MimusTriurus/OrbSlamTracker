@@ -1,10 +1,12 @@
 #include "OrbSlamTracker.h"
-#include "ICvMatProvider.h"
-#include "UdpCvMatProvider.h"
-#include "CamCvMatProvider.h"
 #include <QMatrix3x3>
 #include <QQuaternion>
 #include <QDebug>
+
+#include "ICvMatProvider.h"
+#include "UdpCvMatProvider.h"
+#include "CamCvMatProvider.h"
+#include "StereoCamCvMatProvider.h"
 
 OrbSlamTracker::OrbSlamTracker( const QString &assetsPath, int regim , bool showViewer ) :
     _assetsPath { assetsPath },
@@ -36,19 +38,19 @@ void OrbSlamTracker::track( bool value ) {
     }
 }
 
-float *OrbSlamTracker::rotation( ) {
+QVector<float> &OrbSlamTracker::position( ) {
     QMutexLocker locker ( &_mutex );
-    return _rotation.data( );
+    return _position;
+}
+
+QVector<float> &OrbSlamTracker::rotation( ) {
+    QMutexLocker locker ( &_mutex );
+    return _rotation;
 }
 
 bool OrbSlamTracker::inProgress( ) const {
     QMutexLocker locker ( &_mutex );
     return _inProgress;
-}
-
-float *OrbSlamTracker::position( ) {
-    QMutexLocker locker ( &_mutex );
-    return _position.data( );
 }
 
 void OrbSlamTracker::run( ) {
@@ -65,7 +67,7 @@ void OrbSlamTracker::run( ) {
                 cvMatProvider = new UdpCvMatProvider( );
         break;
         case ORB_SLAM2::System::STEREO:
-            log( "stereo regim unsupported yet. Try monocular regim." );
+            cvMatProvider = new StereoCamCvMatProvider( );
         break;
         case ORB_SLAM2::System::RGBD:
             log( "RGBD regim unsupported yet.Try monocular regim." );
@@ -91,10 +93,12 @@ void OrbSlamTracker::run( ) {
                 if ( !cvMatProvider->cvMat( ).empty( ) )
                     trackResult = orbSlam2->TrackMonocular( cvMatProvider->cvMat( ), curNow );
             break;
-    //        case ORB_SLAM2::System::STEREO:
-    //            if ( !_frame.empty( ) || !_frameRight.empty( ) )
-    //                orbSlam2->TrackStereo( _frame, _frameRight, curNow );
-    //            break;
+            case ORB_SLAM2::System::STEREO:
+                cv::Mat left;
+                cv::Mat right;
+                cvMatProvider->read( left, right );
+                trackResult = orbSlam2->TrackStereo( left, right, curNow );
+            break;
         }
         if ( !trackResult.empty( ) ) {
             // Получаем позицию камеры в пространстве
@@ -117,6 +121,7 @@ void OrbSlamTracker::run( ) {
             _rotation[ 2 ] = rotation.y( );
             _rotation[ 3 ] = rotation.z( );
         }
+//        QThread::msleep( 5 );
     }
     log( "end run" );
     cvMatProvider->stop( );

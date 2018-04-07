@@ -3,7 +3,7 @@
 # Project created by QtCreator 2018-03-11T20:28:43
 #
 #-------------------------------------------------
-QT       += network
+QT       += network xml
 QT       -= gui
 
 TARGET = CvMatProvider
@@ -26,11 +26,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     ICvMatProvider.cpp \
     UdpCvMatProvider.cpp \
-    CamCvMatProvider.cpp
+    CamCvMatProvider.cpp \
+    StereoCamCvMatProvider.cpp \
+    ConfigGetter.cpp
 
 HEADERS += \
     ICvMatProvider.h \
     UdpCvMatProvider.h \
-    CamCvMatProvider.h
+    CamCvMatProvider.h \
+    StereoCamCvMatProvider.h \
+    ConfigGetter.h
 
 include(../../LinkVideoReceiver.pri)

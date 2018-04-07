@@ -21,13 +21,13 @@ void track( bool value ) {
 
 float *position( ) {
     if ( _tracker )
-        return _tracker->position( );
+        return _tracker->position( ).data( );
     return nullptr;
 }
 
 float *rotation( ) {
     if ( _tracker )
-        return _tracker->rotation( );
+        return _tracker->rotation( ).data( );
     return nullptr;
 }
 

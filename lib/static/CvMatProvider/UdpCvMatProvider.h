@@ -15,7 +15,7 @@ public:
     void    init( const QString &configPath ) override;
     void    start( )                          override;
     void    stop( )                           override;
-
+    void    read( cv::Mat &frame )            override;
     cv::Mat cvMat( )                          override;
 private:
     VideoReciever   _receiver;

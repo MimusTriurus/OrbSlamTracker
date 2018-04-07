@@ -27,13 +27,6 @@ public:
 protected slots:
   void teardownGL();
   void update();
-
-protected:
-  void keyPressEvent(QKeyEvent *event);
-  void keyReleaseEvent(QKeyEvent *event);
-  void mousePressEvent(QMouseEvent *event);
-  void mouseReleaseEvent(QMouseEvent *event);
-
 private:
   // OpenGL State Information
   QOpenGLBuffer m_vertex;

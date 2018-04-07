@@ -25,8 +25,8 @@ public:
      */
     void track( bool value );
 
-    float *position( );
-    float *rotation( );
+    QVector<float> &position( );
+    QVector<float> &rotation( );
 
     bool inProgress( ) const;
 

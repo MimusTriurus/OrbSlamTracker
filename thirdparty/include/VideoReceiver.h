@@ -15,7 +15,7 @@ public:
     explicit VideoReciever( QObject *parent = nullptr );
     ~VideoReciever( );
 
-    void listen( const quint16 port, const double interval = 0.33 );
+    void listen( const quint16 port, const double interval = 5 );
     void stopListen( );
 
     const QByteArray &imgData( ) const;
