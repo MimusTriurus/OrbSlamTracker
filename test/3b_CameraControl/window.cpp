@@ -137,6 +137,29 @@ void Window::teardownGL( ) {
     delete m_program;
 }
 
+#include <QtMath>
+
+double roundTo(double inpValue, int inpCount) {
+    double outpValue;
+    double tempVal;
+    tempVal=inpValue*pow(10,inpCount);
+    if (double(int(tempVal))+0.5==tempVal)
+    {
+        if (int(tempVal)%2==0)
+            {outpValue=double(qFloor(tempVal))/pow(10,inpCount);}
+        else
+            {outpValue=double(qCeil(tempVal))/pow(10,inpCount);}
+    }
+    else
+    {
+        if (double(int(tempVal))+0.5>tempVal)
+            {outpValue=double(qCeil(tempVal))/pow(10,inpCount);}
+        else
+            {outpValue=double(qFloor(tempVal))/pow(10,inpCount);}
+    }
+    return(outpValue);
+}
+
 void Window::update( ) {
     float delta = ( QTime::currentTime( ).msec( ) - _last );
     static float transSpeed = 0.05f;
@@ -144,19 +167,33 @@ void Window::update( ) {
     static const float rotSpeed = 1;
 
     float *pos = OrbSlamTrackerWrapper::position( );
+
+//    QVector3D translation( pos[ 0 ], 0, 0 );
     QVector3D translation( pos[ 0 ], -pos[ 1 ], pos[ 2 ] );
-
+    __int64 curNow = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( ) / 1000.0;
     delta = 1;
-
-    translation = QQuaternion::nlerp( QQuaternion( 1, m_camera.translation( ) ), QQuaternion( 1, translation ), delta ).toEulerAngles( );
+    QString _x{ QString::number( roundTo( translation.x( ), 3 ) ) };
+    QString _y{ QString::number( roundTo( translation.y( ), 3 ) ) };
+    QString _z{ QString::number( roundTo( translation.z( ), 3 ) ) };
+//    while (_x.length() < 6) {
+//        _x.append( "0" );
+//    }
+//    while (_y.length() < 6) {
+//        _y.append( "0" );
+//    }
+//    while (_z.length() < 6) {
+//        _z.append( "0" );
+//    }
+//    this->setTitle( _x + " " + _y + " " + _z );
+    translation = QQuaternion::slerp( QQuaternion( 1, m_camera.translation( ) ), QQuaternion( 1, translation ), 1 ).toEulerAngles( );
     m_camera.setTranslation( translation * transSpeed );
 
     float *rotArr{ OrbSlamTrackerWrapper::rotation( ) };
-    __int64 curNow = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( ) / 1000.0;
+//    __int64 curNow = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( ) / 1000.0;
 
     QQuaternion rotation{ rotArr[ 0 ], rotArr[ 1 ], rotArr[ 2 ], rotArr[ 3 ] };
     rotation = QQuaternion::slerp( m_camera.rotation( ), rotation, curNow );
-    //m_camera.setRotation( rotation );
+    m_camera.setRotation( rotation );
 
     _last = QTime::currentTime( ).msec( );
 

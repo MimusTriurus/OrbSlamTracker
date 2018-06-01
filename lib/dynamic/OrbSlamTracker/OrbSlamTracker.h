@@ -41,7 +41,7 @@ private:
     QVector<float>              _rotation;
     QVector<float>              _position;
 
-
+    double tframe;
     mutable QMutex              _mutex;
     QString                     _assetsPath;
     ORB_SLAM2::System::eSensor  _regim;

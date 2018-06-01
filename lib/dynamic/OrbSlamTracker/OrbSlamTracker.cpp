@@ -56,7 +56,7 @@ bool OrbSlamTracker::inProgress( ) const {
 void OrbSlamTracker::run( ) {
     QString vocabPath    { _assetsPath + "/ORBvoc.txt" };
     QString settingsPath { _assetsPath + "/webcam.yaml" };
-
+    tframe = 0.0f;
     ICvMatProvider *cvMatProvider{ nullptr };
 
     switch ( _regim ) {
@@ -68,6 +68,7 @@ void OrbSlamTracker::run( ) {
         break;
         case ORB_SLAM2::System::STEREO:
             cvMatProvider = new StereoCamCvMatProvider( );
+
         break;
         case ORB_SLAM2::System::RGBD:
             log( "RGBD regim unsupported yet.Try monocular regim." );
@@ -88,6 +89,7 @@ void OrbSlamTracker::run( ) {
         QCoreApplication::processEvents( );
         cv::Mat trackResult;
         __int64 curNow = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( ) / 1000.0;
+        tframe += 0.0003f;
         switch ( _regim ) {
             case ORB_SLAM2::System::MONOCULAR:
                 if ( !cvMatProvider->cvMat( ).empty( ) )
@@ -97,7 +99,10 @@ void OrbSlamTracker::run( ) {
                 cv::Mat left;
                 cv::Mat right;
                 cvMatProvider->read( left, right );
-                trackResult = orbSlam2->TrackStereo( left, right, curNow );
+                //std::cout << "w:" << left.size( ).width << " h:" << right.size( ).height << std::endl;
+//                cv::imshow( "l", left );
+//                cv::imshow( "r", right );
+                trackResult = orbSlam2->TrackStereo( left, right, tframe );
             break;
         }
         if ( !trackResult.empty( ) ) {

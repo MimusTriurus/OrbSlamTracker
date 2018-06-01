@@ -28,13 +28,15 @@ SOURCES += \
     UdpCvMatProvider.cpp \
     CamCvMatProvider.cpp \
     StereoCamCvMatProvider.cpp \
-    ConfigGetter.cpp
+    ConfigGetter.cpp \
+    StereoCamCalibrator.cpp
 
 HEADERS += \
     ICvMatProvider.h \
     UdpCvMatProvider.h \
     CamCvMatProvider.h \
     StereoCamCvMatProvider.h \
-    ConfigGetter.h
+    ConfigGetter.h \
+    StereoCamCalibrator.h
 
 include(../../LinkVideoReceiver.pri)

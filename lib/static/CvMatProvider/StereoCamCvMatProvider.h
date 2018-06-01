@@ -5,6 +5,7 @@
 #include <opencv2/opencv.hpp>
 
 #include "ICvMatProvider.h"
+#include "StereoCamCalibrator.h"
 
 class StereoCamCvMatProvider : public QObject, public ICvMatProvider {
     Q_OBJECT
@@ -19,9 +20,7 @@ private:
     cv::VideoCapture _left;
     cv::VideoCapture _right;
 
-    // ICvMatProvider interface
-public:
-
+    //StereoCamCalibrator _calibrator;
 };
 
 #endif // STEREOCAMCVMATPROVIDER_H

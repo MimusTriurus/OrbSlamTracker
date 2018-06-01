@@ -2,4 +2,10 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     3b_CameraControl \
-    ConfigGetterTest
+    ConfigGetterTest \
+    CameraCalibration \
+    DepthMap \
+    StereoCamCalibration \
+    IntrinsicParamGetter \
+    ImgGrabber \
+    UndistortAndRectifyImg
