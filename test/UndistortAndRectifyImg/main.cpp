@@ -5,6 +5,8 @@
 #include <QtCore>
 #include <QDebug>
 
+#include "stereocamcalibrator.h"
+
 using namespace std;
 using namespace cv;
 
@@ -20,7 +22,8 @@ int main( int argc, char *argv[ ] ) {
     const String keys =
     "{lImgFilename|./calibrationImgs/image_left_1.jpg|1}"
     "{rImgFilename|./calibrationImgs/image_right_1.jpg|1}"
-    "{calibFile|./extrinsics.yaml|1}"
+    "{calibFile|extrinsics.yaml|1}"
+    "{calibFileDir|E:/Projects/Qt/Builds/OrbSlam2/bin/|1}"
     "{lImgOutFName|./rectL.jpg|1}"
     "{rImgOutFName|./rectR.jpg|1}";
 
@@ -29,43 +32,36 @@ int main( int argc, char *argv[ ] ) {
     String lImgFilename = parser.get<String>( "lImgFilename" );
     String rImgFilename = parser.get<String>( "rImgFilename" );
     String calibFile    = parser.get<String>( "calibFile" );
+    String calibFileDir = parser.get<String>( "calibFileDir" );
     String lImgOutFName = parser.get<String>( "lImgOutFName" );
     String rImgOutFName = parser.get<String>( "rImgOutFName" );
 
-    Mat R1, R2, P1, P2, Q;
-    Mat K1, K2, R;
-    Vec3d T;
-    Mat D1, D2;
-    Mat img1 = imread( lImgFilename, CV_LOAD_IMAGE_COLOR );
-    Mat img2 = imread( rImgFilename, CV_LOAD_IMAGE_COLOR );
-    cout << img1.size << " " << img2.size;
-    cv::FileStorage fs1( calibFile, cv::FileStorage::READ );
-    fs1[ "K1" ] >> K1;
-    fs1[ "K2" ] >> K2;
-    fs1[ "D1" ] >> D1;
-    fs1[ "D2" ] >> D2;
-    fs1[ "R" ]  >> R;
-    fs1[ "T" ]  >> T;
+    Mat img1 = imread( lImgFilename, 1 );
+    Mat img2 = imread( rImgFilename, 1 );
 
-    fs1[ "R1" ] >> R1;
-    fs1[ "R2" ] >> R2;
-    fs1[ "P1" ] >> P1;
-    fs1[ "P2" ] >> P2;
-    fs1[ "Q" ]  >> Q;
-    cout << "1";
-    cv::Mat lmapx, lmapy, rmapx, rmapy;
-    cv::Mat imgU1, imgU2;
+    StereoCamCalibrator calib;
+    calib.init( img1.size( ), calibFileDir.c_str( ) );
+    calib.calibrate( img1, img2 );
 
-    cv::initUndistortRectifyMap( K1, D1, R1, P1, img1.size( ), CV_32F, lmapx, lmapy );
-    cv::initUndistortRectifyMap( K2, D2, R2, P2, img2.size( ), CV_32F, rmapx, rmapy );
+    cv::Mat stereoMatEdited =  cv::Mat( img1.size( ).height, img1.size( ).width + img2.size( ).width, img1.type( ) );
 
-    cv::remap( img1, imgU1, lmapx, lmapy, cv::INTER_LINEAR );
-    cv::remap( img2, imgU2, rmapx, rmapy, cv::INTER_LINEAR );
+    cv::Rect lRect = cv::Rect( 0, 0, img1.size( ).width, img1.size( ).height );
+    cv::Rect rRect = cv::Rect( img1.size( ).width, 0, img2.size( ).width, img2.size( ).height );
 
-    imwrite( lImgOutFName, imgU1 );
-    imwrite( rImgOutFName, imgU2 );
+    cv::Mat lF = stereoMatEdited( lRect );
+    cv::Mat rF = stereoMatEdited( rRect );
 
-    cout << "done";
+    img1.copyTo( lF );
+    img2.copyTo( rF );
+
+    for( int j = 0; j < stereoMatEdited.rows; j += 16 )
+        line( stereoMatEdited, Point( 0, j ), Point( stereoMatEdited.cols, j ), Scalar( 255, 0, 0 ), 1, 8 );
+
+    cv::imshow( "stereoEdited", stereoMatEdited );
+
+    // save rectifired images
+    imwrite( lImgOutFName, img1 );
+    imwrite( rImgOutFName, img2 );
 
     return a.exec( );
 }

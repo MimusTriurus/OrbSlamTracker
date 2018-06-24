@@ -7,25 +7,16 @@
 class StereoCamCalibrator : public QObject {
     Q_OBJECT
 public:
-    explicit StereoCamCalibrator( cv::Size frameSize = cv::Size{ 640, 480 },
-                                  const QString &dirPath = "",
-                                  QObject *parent = nullptr );
-
+    StereoCamCalibrator( QObject *parent = nullptr );
+    void init( cv::Size frameSize = cv::Size{ 640, 480 },
+               const QString &dirPath = "" );
     void calibrate( cv::Mat &left, cv::Mat &right );
-    /**
-     * @brief
-     * @param i = 0 - left, i = 1 -right
-     */
-    void setValidRoiIndex( int i );
 private:
-    const QString INTRINSICS_FILE;
     const QString EXTRINSICS_FILE;
-
-    cv::Mat     _rmap[ 2 ][ 2 ];
-    cv::Rect    _validROI[ 2 ];
-    int         _validRoiIndex;
-    int         _w, _h;
-    double      _sf;
+    cv::Rect    _targetRect;
+    cv::Mat     _lmapx, _lmapy;
+    cv::Mat     _rmapx, _rmapy;
+    bool        _init;
 };
 
 #endif // STEREOCAMCALIBRATOR_H

@@ -31,22 +31,12 @@ HEADERS += \
 RESOURCES += \
     resources.qrc
 
+INCLUDEPATH += $$PWD/../../thirdparty/include
+DEPENDPATH += $$PWD/../../thirdparty/include
+
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../lib/dynamic/OrbSlamTracker/release/ -lOrbSlamTracker
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../lib/dynamic/OrbSlamTracker/debug/ -lOrbSlamTracker
 else:unix:!macx: LIBS += -L$$OUT_PWD/../../lib/dynamic/OrbSlamTracker/ -lOrbSlamTracker
 
 INCLUDEPATH += $$PWD/../../lib/dynamic/OrbSlamTracker
 DEPENDPATH += $$PWD/../../lib/dynamic/OrbSlamTracker
-
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../thirdparty/lib/ -lopencv_world331
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../thirdparty/lib/ -lopencv_world331d
-
-INCLUDEPATH += $$PWD/../../thirdparty/include
-DEPENDPATH += $$PWD/../../thirdparty/include
-
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../thirdparty/lib/ -lVideoReceiver
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../thirdparty/lib/ -lVideoReceiverd
-
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../thirdparty/lib/ -lMatSerialization
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../thirdparty/lib/ -lMatSerializationd
-################################################################################################################

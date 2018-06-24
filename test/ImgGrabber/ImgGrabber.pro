@@ -19,8 +19,10 @@ DESTDIR = ../../bin
 SOURCES += \
         main.cpp
 
-INCLUDEPATH += $$PWD/../../thirdparty/include
-DEPENDPATH += $$PWD/../../thirdparty/include
+#INCLUDEPATH += $$PWD/../../thirdparty/include
+#DEPENDPATH += $$PWD/../../thirdparty/include
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../thirdparty/lib/ -lopencv_world331
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../thirdparty/lib/ -lopencv_world331d
+#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../thirdparty/lib/ -lopencv_world331
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../thirdparty/lib/ -lopencv_world331d
+
+include(../../LinkOpenCv.pri)

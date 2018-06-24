@@ -19,8 +19,7 @@ public:
 private:
     cv::VideoCapture _left;
     cv::VideoCapture _right;
-
-    //StereoCamCalibrator _calibrator;
+    StereoCamCalibrator _calibrator;
 };
 
 #endif // STEREOCAMCVMATPROVIDER_H

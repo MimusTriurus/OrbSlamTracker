@@ -16,4 +16,4 @@ win32: LIBS += -L$$PWD/thirdparty/lib/ -lg2o
 win32:!win32-g++: PRE_TARGETDEPS += $$PWD/thirdparty/lib/g2o.lib
 else:win32-g++: PRE_TARGETDEPS += $$PWD/thirdparty/lib/libg2o.a
 
-win32: LIBS += -L$$PWD/thirdparty/lib/ -lopencv_world331
+#win32: LIBS += -L$$PWD/thirdparty/lib/ -lopencv_world331

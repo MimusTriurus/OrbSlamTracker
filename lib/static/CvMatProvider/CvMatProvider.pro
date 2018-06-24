@@ -40,3 +40,4 @@ HEADERS += \
     StereoCamCalibrator.h
 
 include(../../LinkVideoReceiver.pri)
+include(../../../LinkOpencv.pri)

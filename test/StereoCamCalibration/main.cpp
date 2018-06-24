@@ -18,22 +18,33 @@ Mat img1, img2, gray1, gray2;
 
 void loadImagePoints( int boardWidth, int boardHeight, int imgsCount, float squareSize,
                       const char* leftimgDir, const char* rightimgDir,
-                      const char* leftImgFilename, const char* rightImgFilename )
+                      const char* leftImgFilename, const char* rightImgFilename, const char* ext )
 {
 
     Size boardSize = Size( boardWidth, boardHeight );
     //  int board_n = boardWidth * boardHeight;
     for ( int i = 1; i <= imgsCount; i++ ) {
-        char leftImg[ 100 ], rightImg[ 100 ];
-        sprintf( leftImg, "%s%s%d.jpg", leftimgDir, leftImgFilename, i );
-        sprintf( rightImg, "%s%s%d.jpg", rightimgDir, rightImgFilename, i );
-        img1 = imread( leftImg, CV_LOAD_IMAGE_COLOR );
-        img2 = imread( rightImg, CV_LOAD_IMAGE_COLOR );
+        //char leftImg[ 100 ], rightImg[ 100 ];
+        QString leftImg{ leftimgDir };// + leftImgFilename + "." + ext };
+        leftImg.append( leftImgFilename );
+        leftImg.append( QString::number( i ) );
+        leftImg.append( "." );
+        leftImg.append( ext );
+        QString rightImg{ rightimgDir };//+ rightImgFilename + "." + ext };
+        rightImg.append( rightImgFilename );
+        rightImg.append( QString::number( i ) );
+        rightImg.append( "." );
+        rightImg.append( ext );
+        //sprintf( leftImg, "%s%s%d." + ext, leftimgDir, leftImgFilename, i );
+        //sprintf( rightImg, "%s%s%d." + ext, rightimgDir, rightImgFilename, i );
+        cout << "imread:" << leftImg.toStdString( ) << endl;
+        img1 = imread( leftImg.toStdString( ), CV_LOAD_IMAGE_COLOR );
+        img2 = imread( rightImg.toStdString( ), CV_LOAD_IMAGE_COLOR );
         cvtColor( img1, gray1, CV_BGR2GRAY );
         cvtColor( img2, gray2, CV_BGR2GRAY );
 
         bool found1 = false, found2 = false;
-
+        cout << "end imread" << endl;
         found1 = cv::findChessboardCorners( img1, boardSize, corners1,
             CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS);
         found2 = cv::findChessboardCorners( img2, boardSize, corners2,
@@ -100,9 +111,9 @@ int main( int argc, char *argv[ ] ) {
 
     FileStorage fsl( fLCalib, FileStorage::READ );
     FileStorage fsr( fRCalib, FileStorage::READ );
-
+    cout << "start laod image points" << endl;
     loadImagePoints( fsl[ "board_width" ], fsl[ "board_height" ], imgsCount, fsl[ "square_size" ],
-                   imgLFolder.c_str( ), imgRFolder.c_str( ), preL.c_str( ), preR.c_str( ) );
+                   imgLFolder.c_str( ), imgRFolder.c_str( ), preL.c_str( ), preR.c_str( ), imgExt.c_str( ) );
 
     cout << "Starting Calibration" << endl;
     Mat K1, K2, R, F, E;
@@ -117,7 +128,8 @@ int main( int argc, char *argv[ ] ) {
 
     cout << "Read intrinsics" << endl;
 
-    stereoCalibrate( objectPoints, leftImgPoints, rightImgPoints, K1, D1, K2, D2, img1.size( ), R, T, E, F );
+    double rms = stereoCalibrate( objectPoints, leftImgPoints, rightImgPoints, K1, D1, K2, D2, img1.size( ), R, T, E, F );
+    cout << "rms: " << rms << endl;
 
     cv::FileStorage fs1( outputFile, cv::FileStorage::WRITE );
     fs1 << "K1" << K1;
@@ -136,13 +148,18 @@ int main( int argc, char *argv[ ] ) {
     cv::Mat R1, R2, P1, P2, Q;
     //flag = CV_CALIB_ZERO_DISPARITY;
     flag = 0; double alpha = -1;
-    stereoRectify( K1, D1, K2, D2, img1.size( ), R, T, R1, R2, P1, P2, Q, flag, alpha );
+    Rect validROI[2];
+    stereoRectify( K1, D1, K2, D2, img1.size( ), R, T, R1, R2, P1, P2, Q, flag, alpha, img1.size( ), &validROI[ 0 ], &validROI[ 1 ] );
+
+    cout << "roi1: " << validROI[ 0 ] << " roi2: " << validROI[ 1 ] << endl;
 
     fs1 << "R1" << R1;
     fs1 << "R2" << R2;
     fs1 << "P1" << P1;
     fs1 << "P2" << P2;
     fs1 << "Q" << Q;
+    fs1 << "vRoi0" << validROI[ 0 ];
+    fs1 << "vRoi1" << validROI[ 1 ];
     fs1.release( );
     cout << "Done Rectification" << endl;
 

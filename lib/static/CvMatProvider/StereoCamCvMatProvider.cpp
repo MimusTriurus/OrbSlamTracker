@@ -9,21 +9,20 @@ void StereoCamCvMatProvider::init( const QString &configPath ) {
 }
 
 void StereoCamCvMatProvider::start( ) {
-    _left.open( 0 );
+    _left.open( 1 );
     if ( !_left.isOpened( ) )
         qDebug( ) << "error on open left cam";
     else {
-//        _left.set( cv::CAP_PROP_FRAME_HEIGHT, 720 );
-//        _left.set( cv::CAP_PROP_FRAME_WIDTH, 1280 );
+        cv::Size size{ ( int )_left.get( cv::CAP_PROP_FRAME_WIDTH ),
+                       ( int )_left.get( cv::CAP_PROP_FRAME_HEIGHT ) };
+        _calibrator.init( size, "E:/Projects/Qt/Builds/OrbSlam2/bin/" );
         qDebug( ) << "left cam is opend";
 
     }
-    _right.open( 1 );
+    _right.open( 0 );
     if ( !_right.isOpened( ) )
         qDebug( ) << "error on open right cam";
     else {
-//        _right.set( cv::CAP_PROP_FRAME_HEIGHT, 720 );
-//        _right.set( cv::CAP_PROP_FRAME_WIDTH, 1280 );
         qDebug( ) << "right cam is opend";
     }
 }
@@ -38,12 +37,15 @@ void StereoCamCvMatProvider::stop( ) {
 }
 
 void StereoCamCvMatProvider::read( cv::Mat &left, cv::Mat &right ) {
-    if ( _left.isOpened( ) ) {
-        _left.read( left );
+    if ( _left.isOpened( ) && _right.isOpened( ) ) {
+        if ( _left.grab( ) && _right.grab( ) ) {
+            _right.retrieve( right );
+            _left.retrieve( left );
+            _calibrator.calibrate( left, right );
+        }
+        else
+            qDebug( ) << "not grab";
     }
-    if ( _right.isOpened( ) ) {
-        _right.read( right );
-    }
-
-    //_calibrator.calibrate( left, right );
+    else
+        qDebug( ) << "not opened";
 }

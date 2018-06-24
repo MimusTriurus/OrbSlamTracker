@@ -34,6 +34,7 @@ HEADERS += \
     OrbSlamTrackerWrapper.h
 
 include(../../../LinkOrbSlam2.pri)
+include(../../../LinkOpenCv.pri)
 include(../../LinkVideoReceiver.pri)
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../static/CvMatProvider/release/ -lCvMatProvider

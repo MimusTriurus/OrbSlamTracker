@@ -78,7 +78,7 @@ int main( int argc, char *argv[ ] ) {
 
         imshow( "left" , img1 );
         imshow( "right", img2 );
-
+        foundLeft = foundRight = true;
         if ( waitKey( 30 ) > 0 ) {
             if ( foundLeft && foundRight ) {
                 x++;

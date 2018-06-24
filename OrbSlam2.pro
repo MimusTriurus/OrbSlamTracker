@@ -9,4 +9,5 @@ SUBDIRS += \
     app \
     test
 
-include(LinkOrbSlam2.pri)
+#include(LinkOrbSlam2.pri)
+#include(LinkOpenCv.pri)

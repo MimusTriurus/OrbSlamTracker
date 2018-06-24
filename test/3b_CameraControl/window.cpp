@@ -191,7 +191,7 @@ void Window::update( ) {
     float *rotArr{ OrbSlamTrackerWrapper::rotation( ) };
 //    __int64 curNow = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( ) / 1000.0;
 
-    QQuaternion rotation{ rotArr[ 0 ], rotArr[ 1 ], rotArr[ 2 ], rotArr[ 3 ] };
+    QQuaternion rotation{ rotArr[ 0 ], -rotArr[ 1 ], rotArr[ 2 ], rotArr[ 3 ] };
     rotation = QQuaternion::slerp( m_camera.rotation( ), rotation, curNow );
     m_camera.setRotation( rotation );
 
