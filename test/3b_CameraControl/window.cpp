@@ -64,8 +64,8 @@ static const Vertex sg_vertexes[] = {
 
 Window::Window( ) {
   m_transform.translate( 0.0f, 0.0f, -5.0f );
-
-  OrbSlamTrackerWrapper::init( qApp->applicationDirPath( ).toUtf8( ), 1, true );
+  QString configFilePath{ qApp->applicationDirPath( ) };
+  OrbSlamTrackerWrapper::init( configFilePath.toUtf8( ), 1, true );
   OrbSlamTrackerWrapper::setLogCallback( onReceiveLog );
 //  OrbSlamTrackerWrapper::localDevice( false );
   OrbSlamTrackerWrapper::track( true );

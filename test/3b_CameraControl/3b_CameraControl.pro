@@ -6,7 +6,7 @@
 
 QT       += core gui network
 
-TARGET = 3b_CameraControl
+TARGET = 3d_CameraControl
 CONFIG   += console
 CONFIG   -= app_bundle
 

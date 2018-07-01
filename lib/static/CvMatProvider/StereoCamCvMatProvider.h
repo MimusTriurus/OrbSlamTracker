@@ -19,6 +19,10 @@ public:
 private:
     cv::VideoCapture _left;
     cv::VideoCapture _right;
+    int _leftCamIndx;
+    int _rightCamIndx;
+    int _frameWidth;
+    int _frameHeight;
     StereoCamCalibrator _calibrator;
 };
 

@@ -18,7 +18,7 @@ void StereoCamCalibrator::init( cv::Size frameSize, const QString &dirPath ) {
 
     cv::Rect validROI[ 2 ];
     QString path{ dirPath };
-    path.append( EXTRINSICS_FILE );
+    //path.append( EXTRINSICS_FILE );
     QFile f( path );
     if ( !f.exists( ) )
         qDebug( ) << "file:" << path << " not found";

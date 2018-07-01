@@ -31,7 +31,6 @@ void OrbSlamTracker::localDevice( bool value ) {
 }
 
 void OrbSlamTracker::track( bool value ) {
-    log( "track" );
     _inProgress = value;
     if ( _inProgress && !this->isRunning( ) ) {
         this->start( );
@@ -79,8 +78,7 @@ void OrbSlamTracker::run( ) {
     }
     if ( !cvMatProvider )
         return;
-
-    cvMatProvider->init( _assetsPath );
+    cvMatProvider->init( QString { _assetsPath + "/settings.yaml" } );
     cvMatProvider->start( );
     ORB_SLAM2::System *orbSlam2 = new ORB_SLAM2::System( vocabPath.toStdString( ), settingsPath.toStdString( ), _regim, _showViewer );
 
@@ -99,9 +97,6 @@ void OrbSlamTracker::run( ) {
                 cv::Mat left;
                 cv::Mat right;
                 cvMatProvider->read( left, right );
-                //std::cout << "w:" << left.size( ).width << " h:" << right.size( ).height << std::endl;
-//                cv::imshow( "l", left );
-//                cv::imshow( "r", right );
                 trackResult = orbSlam2->TrackStereo( left, right, tframe );
             break;
         }
