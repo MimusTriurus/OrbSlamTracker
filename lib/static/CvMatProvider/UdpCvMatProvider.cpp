@@ -8,8 +8,9 @@ UdpCvMatProvider::UdpCvMatProvider( QObject *parent ) :
 //             this, SLOT( onReceiveData( QByteArray ) ) );
 }
 
-void UdpCvMatProvider::init( const QString &configPath ) {
+bool UdpCvMatProvider::init( const QString &configPath ) {
     Q_UNUSED( configPath )
+    return true;
 }
 
 void UdpCvMatProvider::start( ) {
@@ -20,14 +21,9 @@ void UdpCvMatProvider::stop( ) {
     this->_receiver.stopListen( );
 }
 
-void UdpCvMatProvider::read( cv::Mat &frame ) {
+bool UdpCvMatProvider::read( cv::Mat &frame ) {
     _mat.copyTo( frame );
-}
-
-cv::Mat UdpCvMatProvider::cvMat( ) {
-    if ( !_receiver.imgData( ).isEmpty( ) )
-        _mat = MatSerialization::deserializeMat( _receiver.imgData( ) );
-    return _mat;
+    return true;
 }
 
 void UdpCvMatProvider::onReceiveData( QByteArray data ) {

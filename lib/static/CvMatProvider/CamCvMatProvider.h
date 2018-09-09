@@ -11,13 +11,10 @@ class CamCvMatProvider : public QObject, public ICvMatProvider {
 public:
     explicit CamCvMatProvider( QObject *parent = nullptr );
 
-    void    init( const QString &configPath )   override;
+    bool    init( const QString &configPath )   override;
     void    start( )                            override;
-    void    stop( )                             override;
-    void    read( cv::Mat &frame )              override;
-    cv::Mat cvMat( )                            override;
 private:
-    cv::VideoCapture _capture;
+    int _cameraIndex;
 };
 
 #endif // CAMCVMATPROVIDER_H

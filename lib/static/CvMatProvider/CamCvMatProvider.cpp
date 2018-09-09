@@ -2,39 +2,31 @@
 #include <QDebug>
 
 CamCvMatProvider::CamCvMatProvider( QObject *parent ) :
+    _cameraIndex{ 0 },
     QObject( parent ) {
 
 }
 
-void CamCvMatProvider::init( const QString &configPath ) {
-    Q_UNUSED( configPath )
+bool CamCvMatProvider::init( const QString &configPath ) {
+    if ( !ICvMatProvider::init( configPath ) )
+        return false;
+    _fs[ "leftCamIndex" ] >> _cameraIndex;
+    _fs[ "frameWidth" ] >> _frameWidth;
+    _fs[ "frameHeight" ] >> _frameHeight;
+    _fs[ "useCalibration" ] >> _useCalibration;
+    cv::String calibFilePath;
+    _fs[ "calibrationFilePath" ] >> calibFilePath;
+    _fs.release( );
+    qDebug( ) << _cameraIndex << _frameWidth << _frameHeight << calibFilePath.c_str( );
+    if ( _useCalibration )
+        _calibrator.init( cv::Size( _frameWidth, _frameHeight ), calibFilePath.c_str( ) );
+    return true;
 }
 
 void CamCvMatProvider::start( ) {
-    _capture.open( 0 );
-    if ( !_capture.isOpened( ) )
-        qDebug( ) << "error on open cam";
+    _left.open( _cameraIndex );
+    if ( !_left.isOpened( ) )
+        qDebug( ) << "error on open cam" << _cameraIndex;
     else
         qDebug( ) << "cam is opend";
-}
-
-void CamCvMatProvider::stop( ) {
-    if ( _capture.isOpened( ) ) {
-        _capture.release( );
-    }
-}
-
-void CamCvMatProvider::read( cv::Mat &frame ) {
-    if ( _capture.isOpened( ) ) {
-        _capture.read( frame );
-    }
-}
-
-cv::Mat CamCvMatProvider::cvMat( ) {
-    if ( _capture.isOpened( ) )
-        _capture.read( _mat );
-    if ( _mat.empty( ) ) {
-        qDebug( ) << "error frame is empty";
-    }
-    return _mat;
 }

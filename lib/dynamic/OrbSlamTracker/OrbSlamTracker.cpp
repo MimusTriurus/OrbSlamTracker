@@ -7,6 +7,7 @@
 #include "UdpCvMatProvider.h"
 #include "CamCvMatProvider.h"
 #include "StereoCamCvMatProvider.h"
+#include "StereoVideoCvMatProvider.h"
 
 OrbSlamTracker::OrbSlamTracker( const QString &assetsPath, int regim , bool showViewer ) :
     _assetsPath { assetsPath },
@@ -57,7 +58,6 @@ void OrbSlamTracker::run( ) {
     QString settingsPath { _assetsPath + "/webcam.yaml" };
     tframe = 0.0f;
     ICvMatProvider *cvMatProvider{ nullptr };
-
     switch ( _regim ) {
         case ORB_SLAM2::System::MONOCULAR:
             if ( _localDevice )
@@ -67,7 +67,6 @@ void OrbSlamTracker::run( ) {
         break;
         case ORB_SLAM2::System::STEREO:
             cvMatProvider = new StereoCamCvMatProvider( );
-
         break;
         case ORB_SLAM2::System::RGBD:
             log( "RGBD regim unsupported yet.Try monocular regim." );
@@ -80,22 +79,23 @@ void OrbSlamTracker::run( ) {
         return;
     cvMatProvider->init( QString { _assetsPath + "/settings.yaml" } );
     cvMatProvider->start( );
-    ORB_SLAM2::System *orbSlam2 = new ORB_SLAM2::System( vocabPath.toStdString( ), settingsPath.toStdString( ), _regim, _showViewer );
-
+    ORB_SLAM2::System *orbSlam2 = new ORB_SLAM2::System( vocabPath.toStdString( ),
+                                                         settingsPath.toStdString( ),
+                                                         _regim, _showViewer );
     log( "start run" );
     while ( _inProgress ) {
         QCoreApplication::processEvents( );
         cv::Mat trackResult;
+        cv::Mat left;
+        cv::Mat right;
         __int64 curNow = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( ) / 1000.0;
         tframe += 0.0003f;
         switch ( _regim ) {
             case ORB_SLAM2::System::MONOCULAR:
-                if ( !cvMatProvider->cvMat( ).empty( ) )
-                    trackResult = orbSlam2->TrackMonocular( cvMatProvider->cvMat( ), curNow );
+                cvMatProvider->read( left );
+                trackResult = orbSlam2->TrackMonocular( left, curNow );
             break;
             case ORB_SLAM2::System::STEREO:
-                cv::Mat left;
-                cv::Mat right;
                 cvMatProvider->read( left, right );
                 trackResult = orbSlam2->TrackStereo( left, right, tframe );
             break;

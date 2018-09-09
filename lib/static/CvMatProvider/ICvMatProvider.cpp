@@ -4,15 +4,41 @@ ICvMatProvider::~ICvMatProvider( ) {
 
 }
 
-cv::Mat ICvMatProvider::cvMat( ) {
-    return _mat;
+bool ICvMatProvider::init( const QString &configPath ) {
+    return _fs.open( configPath.toStdString( ), cv::FileStorage::READ );
 }
 
-void ICvMatProvider::read( cv::Mat &frame ) {
-    Q_UNUSED( frame )
+void ICvMatProvider::stop( ) {
+    if ( _left.isOpened( ) ) {
+        _left.release( );
+    }
+    if ( _right.isOpened( ) ) {
+        _right.release( );
+    }
 }
 
-void ICvMatProvider::read( cv::Mat &left, cv::Mat &right ) {
-    Q_UNUSED( left )
-    Q_UNUSED( right )
+bool ICvMatProvider::read( cv::Mat &frame ) {
+    if ( _left.isOpened( ) ) {
+        return _left.read( frame );
+    }
+    return false;
+}
+
+bool ICvMatProvider::read( cv::Mat &left, cv::Mat &right ) {
+    if ( _left.isOpened( ) && _right.isOpened( ) ) {
+        if ( _left.grab( ) && _right.grab( ) ) {
+            bool result = _right.retrieve( right ) & _left.retrieve( left );
+            if ( _useCalibration )
+                _calibrator.calibrate( left, right );
+            return result;
+        }
+        else {
+            qDebug( ) << "not grab";
+            return false;
+        }
+    }
+    else {
+        qDebug( ) << "not opened";
+        return false;
+    }
 }

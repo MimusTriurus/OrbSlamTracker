@@ -12,11 +12,10 @@ class UdpCvMatProvider : public QObject, public ICvMatProvider {
 public:
     explicit UdpCvMatProvider( QObject *parent = nullptr );
 
-    void    init( const QString &configPath ) override;
-    void    start( )                          override;
-    void    stop( )                           override;
-    void    read( cv::Mat &frame )            override;
-    cv::Mat cvMat( )                          override;
+    bool init( const QString &configPath ) override;
+    void start( )                          override;
+    void stop( )                           override;
+    bool read( cv::Mat &frame )            override;
 private:
     VideoReciever   _receiver;
 private slots:

@@ -29,7 +29,8 @@ SOURCES += \
     CamCvMatProvider.cpp \
     StereoCamCvMatProvider.cpp \
     ConfigGetter.cpp \
-    StereoCamCalibrator.cpp
+    StereoCamCalibrator.cpp \
+    StereoVideoCvMatProvider.cpp
 
 HEADERS += \
     ICvMatProvider.h \
@@ -37,7 +38,8 @@ HEADERS += \
     CamCvMatProvider.h \
     StereoCamCvMatProvider.h \
     ConfigGetter.h \
-    StereoCamCalibrator.h
+    StereoCamCalibrator.h \
+    StereoVideoCvMatProvider.h
 
 include(../../LinkVideoReceiver.pri)
 include(../../../LinkOpencv.pri)
