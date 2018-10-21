@@ -8,5 +8,7 @@ System requirements:
 4. Compiler - MSVC2013 x64;
 5. Web-camera.
 
-[![SLAM + OpenGL](https://img.youtube.com/vi/oA76ZAMNR90&index=2&list=PLUoW9oYf6yA93GkCt7Tj1ASpUSoN_n8DI&t=0s/0.jpg)](https://www.youtube.com/watch?v=oA76ZAMNR90&index=2&list=PLUoW9oYf6yA93GkCt7Tj1ASpUSoN_n8DI&t=0s)
+[![SLAM + OpenGL](http://img.youtube.com/vi/oA76ZAMNR90/0.jpg)](http://www.youtube.com/watch?v=oA76ZAMNR90 "")
+
+[![SLAM + Unity 5](http://img.youtube.com/vi/SGa-UU-WdEA/0.jpg)](http://www.youtube.com/watch?v=SGa-UU-WdEA "")
 
