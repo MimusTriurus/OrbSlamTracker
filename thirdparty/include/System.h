@@ -56,7 +56,8 @@ public:
     enum eSensor{
         MONOCULAR=0,
         STEREO=1,
-        RGBD=2
+        RGBD=2,
+        STEREO_VIDEO=3
     };
 
 public:

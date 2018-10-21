@@ -1,0 +1,16 @@
+%YAML:1.0
+---
+leftCamIndex: 1
+rightCamIndex: 0
+leftVideoPath: "E:/Projects/Qt/Builds/OrbSlam2/bin/video/leftVideo2.mp4"
+rightVideoPath: "E:/Projects/Qt/Builds/OrbSlam2/bin/video/rightVideo2.mp4"
+frameWidth: 640
+frameHeight: 480
+useCalibration: 1
+calibrationFilePath: "E:/Projects/Qt/Builds/OrbSlam2/bin/extrinsics.yaml"
+
+videoFrameWidth: 1242
+videoFrameHeight: 374
+
+cameraFrameWidth: 640
+cameraFrameHeight: 480

@@ -31,7 +31,7 @@ void StereoVideoCvMatProvider::start( ) {
     _right.set( cv::CAP_PROP_FRAME_HEIGHT, _frameHeight );
 
     if ( !_left.isOpened( ) )
-        qDebug( ) << "error on open left video:";
+        qDebug( ) << "error on open left video:" << _leftVideoPath.c_str( );
     else {
         qDebug( ) << "left video is opend:"
                   << _left.get( cv::CAP_PROP_FRAME_WIDTH )
@@ -40,11 +40,12 @@ void StereoVideoCvMatProvider::start( ) {
     }
     _right.open( _rightVideoPath );
     if ( !_right.isOpened( ) ) {
-        qDebug( ) << "error on open right video";
+        qDebug( ) << "error on open right video:" << _rightVideoPath.c_str( );
     }
     else {
         qDebug( ) << "right video is opend:"
                   << _right.get( cv::CAP_PROP_FRAME_WIDTH )
                   << _right.get( cv::CAP_PROP_FRAME_HEIGHT );
     }
+    qDebug( ) << "*****************";
 }

@@ -4,7 +4,7 @@
 #include <QDebug>
 
 #include "ICvMatProvider.h"
-#include "UdpCvMatProvider.h"
+//#include "UdpCvMatProvider.h"
 #include "CamCvMatProvider.h"
 #include "StereoCamCvMatProvider.h"
 #include "StereoVideoCvMatProvider.h"
@@ -62,11 +62,15 @@ void OrbSlamTracker::run( ) {
         case ORB_SLAM2::System::MONOCULAR:
             if ( _localDevice )
                 cvMatProvider = new CamCvMatProvider( );
-            else
-                cvMatProvider = new UdpCvMatProvider( );
+            //else
+                //cvMatProvider = new UdpCvMatProvider( );
         break;
         case ORB_SLAM2::System::STEREO:
             cvMatProvider = new StereoCamCvMatProvider( );
+        break;
+        case ORB_SLAM2::System::STEREO_VIDEO:
+            _regim = ORB_SLAM2::System::STEREO;
+            cvMatProvider = new StereoVideoCvMatProvider( );
         break;
         case ORB_SLAM2::System::RGBD:
             log( "RGBD regim unsupported yet.Try monocular regim." );
@@ -97,6 +101,8 @@ void OrbSlamTracker::run( ) {
             break;
             case ORB_SLAM2::System::STEREO:
                 cvMatProvider->read( left, right );
+                if ( left.empty( ) | right.empty( ) )
+                    _inProgress = false;
                 trackResult = orbSlam2->TrackStereo( left, right, tframe );
             break;
         }
