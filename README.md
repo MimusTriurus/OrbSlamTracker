@@ -8,5 +8,5 @@ System requirements:
 4. Compiler - MSVC2013 x64;
 5. Web-camera.
 
-Video:
-https://www.youtube.com/watch?v=oA76ZAMNR90&index=2&list=PLUoW9oYf6yA93GkCt7Tj1ASpUSoN_n8DI&t=0s
+[![]()](https://www.youtube.com/watch?v=oA76ZAMNR90&index=2&list=PLUoW9oYf6yA93GkCt7Tj1ASpUSoN_n8DI&t=0s) 
+
