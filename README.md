@@ -8,4 +8,4 @@ System requirements:
 4. Compiler - MSVC2013 x64;
 5. Web-camera.
 
-[![Watch the video](https://raw.github.com/GabLeRoux/WebMole/master/ressources/WebMole_Youtube_Video.png)](https://www.youtube.com/watch?v=oA76ZAMNR90&index=2&list=PLUoW9oYf6yA93GkCt7Tj1ASpUSoN_n8DI&t=0s)
+[![Watch the video](https://img.youtube.com/vi/T-D1KVIuvjA/0.jpg)](https://www.youtube.com/watch?v=oA76ZAMNR90&index=2&list=PLUoW9oYf6yA93GkCt7Tj1ASpUSoN_n8DI&t=0s)
