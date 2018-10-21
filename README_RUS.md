@@ -26,14 +26,14 @@
 2. В папку bin копируем библиотеки Qt;
 3. В папку bin копируем файлы из директории /assets (файлы: ORBvoc.txt, settings.yaml, webcam.yaml);
 4. Калибруем стереопару:
- 4.1 программа калибровки бинарники - https://cloud.mail.ru/public/5iHb/CbBNiNDin);
- 4.2 программа калибровки исходники - https://github.com/MimusTriurus/QtStereoCamCalibration;
+ 	* программа калибровки бинарники - https://cloud.mail.ru/public/5iHb/CbBNiNDin);
+ 	* программа калибровки исходники - https://github.com/MimusTriurus/QtStereoCamCalibration;
 5. В папку bin копируем сгенерированный файл калибровки - extrinsics.yaml;
 6. В файле webcam.yaml прописываем параметры матрицы камеры: Camera.fx, Camera.fy, Camera.cx, Camera.cy (соответсвенно параметры K1[0,0][1,1][0,2][1,2] в файле extrinsics.yaml)
 7. В файле settings.yaml устанавливаем:
-	7.1 leftCamIndex, rightCamIndex - индексы левой и правой камеры соответсвенно;
-	7.2 frameWidth, frameHeight - разрешение камеры
-	7.3 calibrationFilePath - путь до фала калибровки extrinsics.yaml
+	* leftCamIndex, rightCamIndex - индексы левой и правой камеры соответсвенно;
+	* frameWidth, frameHeight - разрешение камеры
+	* calibrationFilePath - путь до фала калибровки extrinsics.yaml
 8. В папку bin копируем библиотеку OrbSlamTracker.dll
 
 Примечание:
